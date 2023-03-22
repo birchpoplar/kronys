@@ -1,0 +1,29 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment files
+venv/
+*.venv
+.env
+
+# Jupyter Notebook files
+.ipynb_checkpoints/
+
+# Distribution / packaging files
+*.egg-info/
+dist/
+build/
+
+# IDE-specific files (e.g., for PyCharm or Visual Studio Code)
+.idea/
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Project-specific files
+*.db

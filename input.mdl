@@ -1,0 +1,15 @@
+Customer{
+    name: CustomerA,
+    subtype: Single,
+    account: 4001,
+    month: 6,
+    revenue: 1000
+}
+Customer{
+    name: CustomerB,
+    subtype: Multiple,
+    account: 4001,
+    month: 6,
+    length: 8,
+    revenue: 2000
+}

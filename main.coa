@@ -1,0 +1,6 @@
+account_number,account_name,description,type,category
+1001,Cash,Main Cash Account,DR,Assets
+2000,Accounts Payable,Amounts owed to suppliers,CR,Liabilities
+3000,Owner's Equity,Owner's Equity Account,CR,Equity
+4001,Revenue,Product Revenue,CR,Income
+4002,Revenue,Service Revenue,CR,Income
