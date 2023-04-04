@@ -1,0 +1,35 @@
+- type: Customer
+  subtype: Single
+  name: CS_Two
+  accounts:
+    revenue: 4002
+    receivable: 1100
+  params:
+    start_month: 8
+    revenue: 10000
+    mths_ar: 1
+
+
+- type: Customer
+  subtype: Single
+  name: CS_One
+  accounts:
+    revenue: 4001
+    receivable: 1100
+  params:
+    start_month: 6
+    revenue: 5000
+    mths_ar: 1
+
+
+- type: Customer
+  subtype: Multiple
+  name: CS_Three
+  accounts:
+    revenue: 4003
+    receivable: 1100
+  params:
+    start_month: 6
+    length: 6
+    revenue: 2500
+    mths_ar: 1

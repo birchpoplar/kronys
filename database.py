@@ -17,7 +17,7 @@ def create_table(conn):
     sql_create_table = """
     CREATE TABLE IF NOT EXISTS general_ledger (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        date TEXT NOT NULL,
+        month NUMBER NOT NULL,
         account NUMBER NOT NULL,
         matching_account NUMBER NOT NULL,
         name TEXT,

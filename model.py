@@ -1,87 +1,57 @@
 from struct_defs import Event
 from database import add_transactions
-from actors import SingleCustomer, MultipleCustomer, Vendor
+from actors import SingleCustomer, MultipleCustomer
+from database import fetch_transactions
+import pandas as pd
 
-def single_customer_event_generator(customer):
-    events = []
-    event_date = customer.month
-    name = customer.name
-    reference = f"INV-{customer.name}-{customer.month}"
-    amount = customer.revenue
-    account = customer.account
-    matching_account = 1001
-
-    event = Event(event_date, name, reference, amount, account, matching_account)
-    events.append(event)
-
-    return events
-
-def multiple_customer_event_generator(customer):
-    events = []
-    event_date = customer.month
-    name = customer.name
-    amount = customer.revenue
-    account = customer.account
-    matching_account = 1001
-
-    for month in range(customer.month, customer.month + customer.length):
-        event = Event(month, name, f"INV-{customer.name}-{month - customer.month}", amount, account, matching_account)
-        events.append(event)
-
-    return events
-
-def event_generator(actors):
-    events = []
-    
-    for actor in actors:
-        if isinstance(actor, SingleCustomer):
-            customer_events = single_customer_event_generator(actor)
-            events.extend(customer_events)
-        elif isinstance(actor, MultipleCustomer):
-            customer_events = multiple_customer_event_generator(actor)
-            events.extend(customer_events)
-        else:
-            raise ValueError("Unknown actor type")
-
-    return events
-
-def ledger_generator(conn, events, accounts, start_month, end_month):
+def ledger_generator(conn, actors, accounts, start_month, end_month):
     transactions = []
 
     for month in range(start_month, end_month):
-        for event in events:
-            if event.event_date == month:
-                if get_account_type_by_number(accounts, event.account) == "CR":
-                    # Main transaction entry
-                    main_transaction = (
-                        event.event_date,
-                        event.account,
-                        event.matching_account,
-                        event.name,
-                        event.reference,
-                        0,
-                        event.amount,
-                    )    
-                    transactions.append(main_transaction)
-                    
-                    # Matching transaction entry
-                    matching_transaction = (
-                        event.event_date,
-                        event.matching_account,
-                        event.account,
-                        event.name,
-                        event.reference,
-                        event.amount,
-                        0,
-                    )
-                    transactions.append(matching_transaction)            
-        
-    # print(transactions)
+        for actor in actors:
+            curr_activity, _ = actor.process_month()
+            first_key = 0
+            for key, value in curr_activity.items():
+                if first_key == 0:
+                    main_account = actor.accounts[key]
+                    first_key = 1
+                else:
+                    matching_account = actor.accounts[key]
 
-    add_transactions(conn, transactions)
+            if get_account_type_by_number(accounts, actor.accounts[main_account]) == "CR":
+                main_transaction = (
+                    month,
+                    main_account,
+                    matching_account,
+                    actor.name,
+                    0,
+                    
+                    )
+            # Main transaction entry
+            main_transaction = (
+                month,
+                e,
+                event.matching_account,
+                event.name,
+                event.reference,
+                0,
+                event.amount,
+            )    
+            transactions.append(main_transaction)
+                    
+
+            transactions.append(matching_transaction) 
 
 def get_account_type_by_number(accounts, account_number):
     for account in accounts:
         if account.account_number == account_number:
             return account.type
     return None
+
+def get_account_number_by_name(accounts, account_name):
+    for account in accounts:
+        if account.account_name == account_name:
+            return account.account_number
+    return None
+
+
