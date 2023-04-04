@@ -23,13 +23,10 @@ def main():
 
     input_file = "input.yaml"
     parsed_actors = parse_input_file(input_file)
-    print(parsed_actors)
-    for actor in parsed_actors:
-        print(actor.accounts)
 
     ledger_generator(conn, parsed_actors, accounts, start_month, end_month)
 
-
+    print_ledger(conn)
 
 if __name__ == "__main__":
     main()

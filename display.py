@@ -7,7 +7,7 @@ def print_ledger(conn):
         print("No transactions found in the general ledger.")
         return
 
-    header = ("ID", "Date", "Account", "Matching Account", "Name", "Reference", "Debit", "Credit")
+    header = ("ID", "Month", "Account", "Matching Account", "Name", "Reference", "Debit", "Credit")
     row_format = "{:<5} {:<10} {:<20} {:<20} {:<15} {:<25} {:<8} {:<8}"
     print(row_format.format(*header))
 

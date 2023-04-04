@@ -36,7 +36,7 @@ def create_table(conn):
 def add_transaction(conn, transaction):
     """Insert a transaction into the general ledger table."""
     sql_insert_transaction = """
-    INSERT INTO general_ledger (date, account, matching_account, name, reference, debit, credit)
+    INSERT INTO general_ledger (month, account, matching_account, name, reference, debit, credit)
     VALUES (?, ?, ?, ?, ?, ?, ?);
     """
     cursor = conn.cursor()

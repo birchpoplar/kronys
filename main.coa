@@ -5,3 +5,4 @@ account_number,account_name,description,type,category
 3000,Owner's Equity,Owner's Equity Account,CR,Equity
 4001,Revenue,Product Revenue,CR,Income
 4002,Revenue,Service Revenue,CR,Income
+4003,Revenue,Subscription Revenue,CR,Income
