@@ -1,7 +1,21 @@
 from collections import defaultdict
 import pandas as pd
 
-class Customer:
+class Actor:
+    def __init__(self, name, accounts, params, subtype):
+        pass
+
+    def process_month(self):
+        pass
+
+    def curr_status(self):
+        pass
+
+    def report_record(self):
+        pass
+
+
+class Customer(Actor):
     def __init__(self, name, accounts, params, subtype):
         # set customer name
         self.name = name
@@ -38,6 +52,9 @@ class SingleCustomer(Customer):
         # Function to process a single month for a single customer
         # *** NOTE: this function may need to return an actors list, for actors created by this function
         
+        # define 
+        actors = []
+
         # update month
         self.curr_month += 1
         
@@ -92,4 +109,19 @@ class MultipleCustomer(Customer):
         return self.curr_activity, self.record
 
 
-
+class Receivable(Actor):
+    def __init__(self, name, accounts, params, subtype):
+        # set customer name
+        self.name = name
+        # set initial month to zero
+        self.curr_month = 0
+        # set initial parameters for customer
+        self.params = params
+        # set accounts
+        self.accounts = accounts
+        # set customer type
+        self.subtype = subtype
+        # create dict of lists for recording
+        self.record = defaultdict(list)
+        # create dict for current month activity
+        self.curr_activity = {}
