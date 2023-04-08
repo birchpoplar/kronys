@@ -1,5 +1,8 @@
 from database import fetch_transactions
 import pandas as pd
+from rich.panel import Panel
+from rich.text import Text
+from rich.console import Console
 
 def print_ledger(conn):
     transactions = fetch_transactions(conn)
@@ -26,3 +29,19 @@ def print_dataframe(df, title):
         table.add_row(str(index[0]), str(index[1]), *[str(value) for value in row])
 
     print(table)
+
+
+def print_header(console: Console):
+    header = Text("Kronys - Financial Statement Generator", style="bold blue")
+    console.print(Panel(header, expand=False, border_style="blue"))
+
+
+def print_status_message(console: Console, message, msg_type="info"):
+    if msg_type == "complete":
+        console.print(f"[green]✔[/green] {message}")
+    elif msg_type == "processing":
+        console.print(f"[yellow]⏳[/yellow] {message}")
+    elif msg_type == "error":
+        console.print(f"[red]❌[/red] {message}")
+    else:
+        console.print(f"[blue]ℹ[/blue] {message}")

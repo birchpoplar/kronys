@@ -2,10 +2,13 @@ from database import add_transactions
 from actors import SingleCustomer, MultipleCustomer
 from database import fetch_transactions
 import pandas as pd
+from display import print_status_message, print_header
+from rich.console import Console
 
-def ledger_generator(conn, actors, accounts, start_month, end_month):
+def ledger_generator(conn, actors, accounts, start_month, end_month, console: Console):
     transactions = []
 
+    print_status_message(console, "Generating ledger...", "processing")
     for month in range(start_month, end_month):
         for actor in actors:
             curr_activity, _ = actor.process_month()
