@@ -72,7 +72,7 @@ class SingleCustomer(Customer):
                 self.curr_activity['receivable'] = self.params['revenue']
                 actor_accounts = { 'receivable': 1100, 'cash': 1001}
                 actor_params = { 'pmt_month': (self.curr_month + self.params['mths_ar']), 'amount' : self.params['revenue']}
-                actor = Receivable('AR NAME', actor_accounts, actor_params, self.curr_month-1)
+                actor = Receivable(self.name + ' ' + str(self.curr_month) + ' AR', actor_accounts, actor_params, self.curr_month-1)
                 actors.append(actor)
             else:
                 self.curr_activity['receivable'] = 0
@@ -90,6 +90,8 @@ class MultipleCustomer(Customer):
     def process_month(self):
         # Function to process a single month for a recurring, multiple month customer
         
+        actors = []
+
         # update month
         self.curr_month += 1
         
@@ -105,11 +107,15 @@ class MultipleCustomer(Customer):
         if self.curr_month >= self.params['start_month'] and self.curr_month <= self.params['start_month'] + self.params['length']:  
             self.record['receivable'].append(self.params['revenue'] * (self.curr_month - self.params['start_month'] + 1))
             self.curr_activity['receivable'] = self.params['revenue']
+            actor_accounts = { 'receivable': 1100, 'cash': 1001}
+            actor_params = { 'pmt_month': (self.curr_month + self.params['mths_ar']), 'amount' : self.params['revenue']}
+            actor = Receivable(self.name + ' Mth:' + str(self.curr_month) + ' AR', actor_accounts, actor_params, self.curr_month-1)
+            actors.append(actor)
         else:
             self.record['receivable'].append(0)
             self.curr_activity['receivable'] = 0
 
-        return self.curr_activity, self.record
+        return self.curr_activity, self.record, actors
 
 
 class Receivable(Actor):
@@ -124,6 +130,9 @@ class Receivable(Actor):
         self.accounts = account_list
         # create dict of lists for recording
         self.record = defaultdict(list)
+        if start_month > 1:
+            self.record['receivable'] = [0] * (start_month)
+            self.record['cash'] = [0] * (start_month)
         # create dict for current month activity
         self.curr_activity = {}
 
@@ -137,18 +146,23 @@ class Receivable(Actor):
         self.curr_month += 1
 
         # apply cash
-        print('Processing Receivable: ', self.curr_month, self.params['pmt_month'])
         if self.curr_month == self.params['pmt_month']:
             self.curr_activity['receivable'] = -1 * self.params['amount']
+            self.record['receivable'].append(self.curr_activity['receivable'])
             self.curr_activity['cash'] = self.params['amount']
+            self.record['cash'].append(self.curr_activity['cash'])
         else:
             self.curr_activity['receivable'] = 0
+            self.record['receivable'].append(0)
             self.curr_activity['cash'] = 0
-
-        print('Processed Receivable: ', self.curr_activity)
+            self.record['cash'].append(0)
 
         return self.curr_activity, self.record, actors
 
     def curr_status(self):
         # Return the current status of the receivable
         return self.name, self.curr_month, self.accounts, self.params, self.record
+    
+    def report_record(self):
+        # Return a dataframe of the record plus the account names
+        return self.accounts, self.record
