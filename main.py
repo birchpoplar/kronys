@@ -50,7 +50,7 @@ def main():
 
     ledger_generator(conn, parsed_actors, accounts, start_month, end_month, console)
 
-    # print_ledger(conn)
+    print_ledger(conn)
 
     transactions = fetch_transactions_to_df(conn)
     

@@ -1,5 +1,5 @@
 from database import add_transactions
-from actors import SingleCustomer, MultipleCustomer
+from actors import SingleCustomer, MultipleCustomer, Receivable
 from database import fetch_transactions
 import pandas as pd
 from display import print_status_message, print_header
@@ -10,8 +10,18 @@ def ledger_generator(conn, actors, accounts, start_month, end_month, console: Co
 
     print_status_message(console, "Generating ledger...", "processing")
     for month in range(start_month, end_month):
-        for actor in actors:
-            curr_activity, _ = actor.process_month()
+        print_status_message(console, "Processing month " + str(month) + "...", "processing")
+        actor_count = len(actors)
+        actor_ptr = 0
+        while actor_count > 0:
+            actor = actors[actor_ptr]
+            curr_activity, curr_report, actors_addl = actor.process_month()
+            if len(actors_addl) > 0:
+                for new_actor in actors_addl:
+                    actors.append(new_actor)
+                    print_status_message(console, "New actor added: " + new_actor.name, "complete")
+                    print(new_actor.curr_status())
+                    actor_count += 1
             tacc_entry, tacc = [], []
             for key, value in curr_activity.items():
                 acc_number = actor.accounts[key]
@@ -84,6 +94,8 @@ def ledger_generator(conn, actors, accounts, start_month, end_month, console: Co
                 transactions.append(transaction)
             else:
                 pass
+            actor_ptr += 1
+            actor_count -= 1
 
     # Now add the transactions to the database
     add_transactions(conn, transactions)

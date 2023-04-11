@@ -22,27 +22,39 @@
     mths_ar: 1
 
 
-- type: Customer
-  subtype: Multiple
-  name: CS_Three
-  accounts:
-    revenue: 4003
-    receivable: 1100
-  params:
-    start_month: 6
-    length: 6
-    revenue: 2500
-    mths_ar: 1
-
 
 - type: Customer
-  subtype: Multiple
-  name: CS_Four
+  subtype: Single
+  name: CS_Six
   accounts:
     revenue: 4001
     receivable: 1100
   params:
-    start_month: 8
-    length: 2
-    revenue: 7500
-    mths_ar: 1
+    start_month: 3
+    revenue: 100000
+    mths_ar: 2
+
+#- type: Customer
+#  subtype: Multiple
+#  name: CS_Three
+#  accounts:
+#    revenue: 4003
+#    receivable: 1100
+#  params:
+#    start_month: 6
+#    length: 6
+#    revenue: 2500
+#    mths_ar: 1
+
+
+#- type: Customer
+#  subtype: Multiple
+#  name: CS_Four
+#  accounts:
+#    revenue: 4001
+#    receivable: 1100
+#  params:
+#    start_month: 8
+#    length: 2
+#    revenue: 7500
+#    mths_ar: 1
